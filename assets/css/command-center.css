@@ -625,6 +625,7 @@ h2.section-title {
 .legend-item:hover {
     background: rgba(0, 242, 255, 0.08);
     color: var(--text-main);
+    transform: scale(1.02);
 }
 
 
@@ -1102,7 +1103,11 @@ h2.section-title {
 
 .booth-marker {
     cursor: pointer;
-    transition: all 0.3s;
+    transition: transform 0.3s ease;
+}
+
+.booth-marker:hover {
+    transform: scale(1.15);
 }
 
 .booth-marker circle {

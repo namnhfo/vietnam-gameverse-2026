@@ -1,0 +1,7 @@
+.vercel
+.env*.local
+*.jpg_backup
+map_backup.jpg
+scratch/
+.DS_Store
+node_modules/
