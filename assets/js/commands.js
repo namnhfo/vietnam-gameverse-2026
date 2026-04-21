@@ -300,7 +300,7 @@ function renderFanMeeting() {
             <div class="fm-header-panel">
                 <div class="fm-title-block">
                     <div class="scan-line"></div>
-                    <span class="cyber-tag">SYSTEM ACTIVATED</span>
+
                     <h2 class="cyber-glitch-title" data-text="${FANMEETING_DATA.title}">${FANMEETING_DATA.title}</h2>
                     <p class="cyber-subtitle">${FANMEETING_DATA.subtitle}</p>
                     <p class="cyber-desc">${FANMEETING_DATA.description}</p>
@@ -308,11 +308,11 @@ function renderFanMeeting() {
                 </div>
                 
                 <div class="fm-selector">
-                    <button class="selector-btn active" data-day="1" onclick="switchRoster(1)">
-                        <span class="btn-dec">[01]</span> NGÀY 08.05
+                    <button class="cyber-btn active" data-day="1" onclick="switchRoster(1)">
+                        NGÀY 08.05
                     </button>
-                    <button class="selector-btn" data-day="2" onclick="switchRoster(2)">
-                        <span class="btn-dec">[02]</span> NGÀY 09.05
+                    <button class="cyber-btn" data-day="2" onclick="switchRoster(2)">
+                        NGÀY 09.05
                     </button>
                 </div>
             </div>
@@ -327,8 +327,8 @@ function renderFanMeeting() {
 }
 
 function switchRoster(day) {
-    document.querySelectorAll('.selector-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector(`.selector-btn[data-day="${day}"]`)?.classList.add('active');
+    document.querySelectorAll('.fm-selector .cyber-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.fm-selector .cyber-btn[data-day="${day}"]`)?.classList.add('active');
 
     const area = document.getElementById('fm-roster-area');
     if (!area) return;
@@ -399,7 +399,7 @@ function renderTournaments(tournaments) {
                         <p class="card-label">Ngày thi đấu</p>
                         <p class="card-value">${tour.date}</p>
                     </div>
-                    <div style="text-align:right;">
+                    <div style="text-align:left;">
                         <p class="card-label">Prize Pool</p>
                         <p class="card-value" style="color:var(--neon-yellow);">${tour.prize}</p>
                     </div>
@@ -492,6 +492,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (typeof renderAgenda === 'function') renderAgenda(parseInt(tab.dataset.day));
             });
         });
+
+        // Initialize Magnific Popup for Cosplay
+        if (typeof $.fn.magnificPopup !== 'undefined') {
+            $('.cosplay-zoom-link').magnificPopup({
+                type: 'image',
+                closeOnContentClick: true,
+                mainClass: 'mfp-fade mfp-img-mobile',
+                image: {
+                    verticalFit: true,
+                    markup: '<div class="mfp-figure">'+
+                              '<div class="mfp-close"></div>'+
+                              '<div class="mfp-img"></div>'+
+                              '<div class="mfp-bottom-bar">'+
+                                '<div class="mfp-title"></div>'+
+                                '<div class="mfp-counter"></div>'+
+                              '</div>'+
+                            '</div>'
+                },
+                gallery: {
+                    enabled: true
+                },
+                zoom: {
+                    enabled: true,
+                    duration: 300,
+                    opener: function(element) {
+                        return element.find('img');
+                    }
+                },
+                callbacks: {
+                    resize: function() {
+                        var img = this.content.find('.mfp-img');
+                        if (img.length) {
+                            img.css('max-height', '80vh');
+                        }
+                    },
+                    imageLoadComplete: function() {
+                        var self = this;
+                        setTimeout(function() {
+                            self.wrap.addClass('mfp-ready');
+                        }, 16);
+                    }
+                }
+            });
+        }
 
         console.log('[GV2026] Scripts initialized successfully.');
     } catch (err) {
