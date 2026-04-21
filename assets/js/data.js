@@ -98,16 +98,37 @@ const FANMEETING_DATA = {
 const TOURNAMENT_DATA = [
     { id: 'vmc', name: 'VMC Spring 2026 Grand Finals', category: 'LEAGUE OF LEGENDS', date: '08/05/2026', prize: '500,000,000 đ', image: 'assets/images/tournament_1.jpg' },
     { id: 'sea', name: 'SEA Esports Nation Cup: PUBG Mobile, Teamfight Tactics, Audition, Total Football, Crossfire Legend', category: 'MULTI-GAME', date: '08 - 09/05/2026', prize: '~2,500,000,000 đ', image: 'assets/images/tournament_2.jpg' },
-    { id: 'fc',  name: 'FC Mobile Invitation Cup 2026', category: 'FC MOBILE', date: '09/05/2026', prize: '380,000,000 đ', image: 'assets/images/tournament_3.jpg' },
-    { id: 'wr',  name: 'Wild Rift Champions SEA 2026', category: 'WILD RIFT', date: '08 - 09/05/2026', prize: '450,000,000 đ', image: 'assets/images/tournament_1.jpg' },
-    { id: 'ff',  name: 'Free Fire World Series VN Qualifiers', category: 'FREE FIRE', date: '08/05/2026', prize: '600,000,000 đ', image: 'assets/images/tournament_2.jpg' },
-    { id: 'aov', name: 'Arena of Valor International Exhibition', category: 'AOV', date: '09/05/2026', prize: '700,000,000 đ', image: 'assets/images/tournament_3.jpg' }
+    { id: 'fc',  name: 'FC Mobile Invitation Cup 2026', category: 'FC MOBILE', date: '09/05/2026', prize: '380,000,000 đ', image: 'assets/images/tournament_3.jpg' }
 ];
 
 const TOURNAMENT_DETAILS = {
-    vmc: { title: "VMC Spring 2026 Grand Finals", game: "League of Legends", prize: "500,000,000 đ", intro: "Giải đấu CLB lớn nhất Việt Nam, quy tụ những tuyển thủ trẻ xuất sắc từ khắp cả nước tranh tài ngôi vô địch quốc gia.", schedule: "13:30 – Khai mạc\n14:00 – Chung kết Bo5\n18:30 – Lễ trao giải", prizes: "🥇 Quán quân: 250,000,000đ\n🥈 Á quân: 100,000,000đ\n🥉 Hạng 3: 50,000,000đ\n⭐ MVP: 50,000,000đ" },
-    sea:  { title: "SEA Esports Nation Cup", game: "Đa bộ môn (PUBG, TFT, Audition, FC, Crossfire)", prize: "~2,500,000,000 đ", intro: "Đại hội Esports các quốc gia Đông Nam Á với 10 đội tuyển quốc gia. Đây là sân chơi tầm quốc tế đầu tiên tổ chức tại Việt Nam năm 2026.", schedule: "08/05: Vòng bảng PUBG Mobile & Audition\n09/05: Chung kết tất cả bộ môn\n19:00: Lễ bế mạc & trao giải", prizes: "Phân bổ theo từng bộ môn\n💰 Tổng giải thưởng: ~100,000 USD\nThưởng thêm từ nhà tài trợ mỗi bộ môn" },
-    fc:   { title: "FC Mobile Invitation Cup 2026", game: "FC Mobile", prize: "380,000,000 đ", intro: "Giải đấu giao hữu quốc tế với sự tham gia của Pro Player hàng đầu khu vực và các đại sứ thương hiệu EA Sports tại Đông Nam Á.", schedule: "09:00 – Vòng loại trực tiếp\n14:00 – Bán kết\n16:30 – Chung kết\n18:30 – Trao giải", prizes: "🥇 Quán quân: 150,000,000đ\n🥈 Á quân: 80,000,000đ\n🥉 Top 4: 40,000,000đ/đội" }
+    vmc: {
+        title: 'VMC Spring 2026 Grand Finals',
+        image: 'assets/images/tournament_1.jpg',
+        intro: 'Giải đấu CLB lớn nhất Việt Nam trong khuôn khổ VCS – Vietnam Championship Series, quy tụ những tuyển thủ trẻ xuất sắc tranh tài ngôi vô địch quốc gia mùa Xuân 2026. VMC Spring là sân chơi đỉnh cao của League of Legends Việt Nam với format Bo5 căng thẳng và kịch tính.',
+        date: '08/05/2026',
+        prize: '500,000,000 đ',
+        format: 'Bo5 · Single Elim',
+        location: 'Hà Nội, ICE'
+    },
+    sea: {
+        title: 'SEA Esports Nation Cup',
+        image: 'assets/images/tournament_2.jpg',
+        intro: 'Đại hội Esports các quốc gia Đông Nam Á với sự tham gia của 10 đội tuyển quốc gia tranh tài ở 5 bộ môn: PUBG Mobile, Teamfight Tactics, Audition, Total Football và Crossfire Legend. Đây là sân chơi tầm quốc tế đầu tiên được tổ chức tại Việt Nam năm 2026.',
+        date: '08–09/05/2026',
+        prize: '~2,500,000,000 đ',
+        format: 'Multi-Game · Group + KO',
+        location: 'TP. HCM, GEM Center'
+    },
+    fc: {
+        title: 'FC Mobile Invitation Cup 2026',
+        image: 'assets/images/tournament_3.jpg',
+        intro: 'Giải đấu giao hữu quốc tế với sự tham gia của các Pro Player hàng đầu khu vực Đông Nam Á và đại sứ thương hiệu EA Sports. Đây là cơ hội để cộng đồng FC Mobile gặp gỡ, giao lưu và xem trực tiếp những pha bóng đỉnh cao.',
+        date: '09/05/2026',
+        prize: '380,000,000 đ',
+        format: 'Invitational · Bo3',
+        location: 'TP. HCM, GEM Center'
+    }
 };
 
 const FAQ_DATA = [

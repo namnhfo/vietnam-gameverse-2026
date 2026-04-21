@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "awf_version": "3.3.0"
+  },
+  "project": {
+    "name": "Vietnam GameVerse 2026 - Ticket",
+    "type": "Landing Page",
+    "status": "In Progress"
+  },
+  "tech_stack": {
+    "frontend": {
+      "language": "HTML5, CSS3, JavaScript",
+      "libraries": [
+        "jQuery 2.1.4",
+        "Swiper 11",
+        "Magnific Popup",
+        "Stickyfill",
+        "Simple Scrollbar"
+      ],
+      "styling": "Vanilla CSS"
+    }
+  },
+  "features": [
+    {
+      "name": "Đăng ký tham dự (Ticket Section)",
+      "description": "Hiển thị các loại vé: Ngày 1, Ngày 2, Combo 2 ngày với hiệu ứng highlight."
+    },
+    {
+      "name": "Lịch trình sự kiện (Agenda)",
+      "description": "Bảng lịch trình linh hoạt theo ngày."
+    },
+    {
+      "name": "Sơ đồ sự kiện (Interactive Map)",
+      "description": "Bản đồ tương tác với các điểm đánh dấu booth, hỗ trợ zoom và popup thông tin."
+    },
+    {
+      "name": "Hành trình Wonderland",
+      "description": "Hệ thống nhiệm vụ trải nghiệm tại các booth."
+    },
+    {
+      "name": "Game Arena",
+      "description": "Slider hiển thị các giải đấu và thông tin chi tiết qua modal."
+    },
+    {
+      "name": "Q&A",
+      "description": "Giải đáp các câu hỏi thường gặp."
+    }
+  ],
+  "business_rules": [
+    "Vé Combo 2 ngày được đánh dấu là 'BEST CHOICE' để khuyến khích mua.",
+    "Hành trình Wonderland hướng người dùng tham gia các booth tài trợ."
+  ]
+}

@@ -301,7 +301,7 @@ function renderFanMeeting() {
                 <div class="fm-title-block">
                     <div class="scan-line"></div>
 
-                    <h2 class="cyber-glitch-title" data-text="${FANMEETING_DATA.title}">${FANMEETING_DATA.title}</h2>
+                    <h3 class="cyber-glitch-title" data-text="${FANMEETING_DATA.title}">${FANMEETING_DATA.title}</h3>
                     <p class="cyber-subtitle">${FANMEETING_DATA.subtitle}</p>
                     <p class="cyber-desc">${FANMEETING_DATA.description}</p>
                     <a href="${FANMEETING_DATA.cta.link}" target="_blank" class="cyber-btn cyber-btn-yellow mt-3">${FANMEETING_DATA.cta.text}</a>
@@ -355,6 +355,7 @@ function switchRoster(day) {
     }, 200);
 }
 
+
 // ═══════════════════════════════════════════════════════════════
 // GAME ARENA — Swiper + Render
 // ═══════════════════════════════════════════════════════════════
@@ -370,15 +371,15 @@ function initTournamentSwiper() {
     if (!container) return;
 
     tournamentSwiper = new Swiper('.game-arena-slider', {
-        slidesPerView: 4, spaceBetween: 30,
+        slidesPerView: 4, spaceBetween: 24,
         observer: true, observeParents: true,
         watchSlidesProgress: true,
         pagination: { el: '.swiper-pagination', clickable: true },
         navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-        breakpoints: { 
+        breakpoints: {
             320: { slidesPerView: 1, spaceBetween: 10 },
-            768: { slidesPerView: 2, spaceBetween: 20 }, 
-            1024: { slidesPerView: 4, spaceBetween: 30 } 
+            768: { slidesPerView: 2, spaceBetween: 16 },
+            1024: { slidesPerView: 4, spaceBetween: 24 }
         }
     });
 }
@@ -386,28 +387,37 @@ function initTournamentSwiper() {
 function renderTournaments(tournaments) {
     const container = document.getElementById('tournament-display');
     if (!container) return;
-    container.innerHTML = tournaments.map(tour => `
+
+    const cards = tournaments.slice(0, 3).map(tour => `
         <div class="swiper-slide">
-            <div class="tournament-card cyber-card">
+            <div class="tournament-card">
                 <div class="card-image">
-                    <img src="${tour.image}" alt="${tour.name}">
+                    <img src="${tour.image}" alt="${tour.name}" style="width:100%; height:180px; object-fit:cover; border-radius:8px; display:block;">
                 </div>
-                <p class="card-category">${tour.category}</p>
-                <h3 class="card-name">${tour.name}</h3>
-                <div class="card-footer">
-                    <div>
-                        <p class="card-label">Ngày thi đấu</p>
-                        <p class="card-value">${tour.date}</p>
-                    </div>
-                    <div style="text-align:left;">
-                        <p class="card-label">Prize Pool</p>
-                        <p class="card-value" style="color:var(--neon-yellow);">${tour.prize}</p>
-                    </div>
+                <p class="card-category" style="color:var(--neon-cyan); font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin:14px 0 8px;">${tour.category}</p>
+                <h3 class="card-name" style="color:#fff; font-size:15px; font-weight:700; line-height:1.4; margin:0 0 16px;">${tour.name}</h3>
+                <div class="card-footer" style="margin-top:auto;">
+                    <p style="color:rgba(255,255,255,0.6); font-size:13px; margin:0 0 4px;">${tour.date}</p>
+                    <p style="color:rgba(255,255,255,0.7); font-size:12px; font-weight:500; margin:0 0 4px;">Prize Pool</p>
+                    <p style="color:var(--neon-yellow); font-size:16px; font-weight:700; margin:0 0 14px;">${tour.prize}</p>
+                    <button onclick="openTournamentDetail('${tour.id}')" class="tournament-detail-btn">Chi tiết</button>
                 </div>
-                <button onclick="openTournamentDetail('${tour.id}')" class="cyber-btn-sm" style="width:100%; padding:8px; margin-top:12px;">Chi tiết</button>
             </div>
         </div>
     `).join('');
+
+    // TBA card (4th slot to match production)
+    const tbaCard = `
+        <div class="swiper-slide">
+            <div class="tournament-card tournament-card-tba">
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:280px;">
+                    <p style="color:var(--neon-yellow); font-size:24px; font-weight:800; text-align:center; line-height:1.3;">To Be<br>Announced</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = cards + tbaCard;
     setTimeout(initTournamentSwiper, 100);
 }
 
@@ -442,26 +452,29 @@ function toggleFAQ(el) {
 // ═══════════════════════════════════════════════════════════════
 
 function openTournamentDetail(id) {
-    const data = TOURNAMENT_DETAILS[id] || { title: "Đang cập nhật", intro: "—", schedule: "—", prizes: "—", game: "—", prize: "—" };
+    const data = TOURNAMENT_DETAILS[id] || {
+        title: 'Đang cập nhật', intro: '—', date: '—', prize: '—', format: '—', location: '—', image: ''
+    };
     const modal = document.getElementById('tournament-modal');
     if (!modal) return;
-    
-    document.getElementById('modal-title').innerText = data.title;
-    document.getElementById('modal-game').innerText = data.game;
-    document.getElementById('modal-prize').innerText = data.prize;
-    
-    // Using innerText for these because of white-space: pre-line in CSS
-    document.getElementById('modal-intro').innerText = data.intro;
-    document.getElementById('modal-schedule').innerText = data.schedule;
-    document.getElementById('modal-prizestructure').innerText = data.prizes;
 
-    modal.style.display = 'block';
+    const img = document.getElementById('tm-img');
+    if (img) { img.src = data.image || ''; img.alt = data.title || ''; }
+
+    const el = (id) => document.getElementById(id);
+    if (el('tm-intro'))    el('tm-intro').innerText    = data.intro    || '—';
+    if (el('tm-date'))     el('tm-date').innerText     = data.date     || '—';
+    if (el('tm-prize'))    el('tm-prize').innerText    = data.prize    || '—';
+    if (el('tm-format'))   el('tm-format').innerText   = data.format   || '—';
+    if (el('tm-location')) el('tm-location').innerText = data.location || '—';
+
+    modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
 
 function closeTournamentModal() {
     const modal = document.getElementById('tournament-modal');
-    if (modal) { modal.style.display = 'none'; document.body.style.overflow = 'auto'; }
+    if (modal) { modal.style.display = 'none'; document.body.style.overflow = ''; }
 }
 
 // ═══════════════════════════════════════════════════════════════

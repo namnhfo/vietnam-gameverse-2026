@@ -40,6 +40,7 @@ h2.section-title {
     text-align: center;
     color: #fff;
     text-transform: uppercase;
+    font-style: normal !important;
     letter-spacing: 2px;
     margin-bottom: 40px;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
@@ -383,13 +384,14 @@ h2.section-title {
 }
 
 .cyber-glitch-title {
-    font-size: 42px;
-    font-weight: 900;
+    font-size: 32px;
+    font-weight: 800;
     text-transform: uppercase;
-    font-style: italic;
+    font-style: normal !important;
     color: #fff;
     margin: 0 0 10px;
-    line-height: 1.1;
+    line-height: 1.2;
+    letter-spacing: 2px;
     text-shadow: 2px 2px 0px rgba(0, 242, 255, 0.5);
 }
 
@@ -731,9 +733,11 @@ h2.section-title {
 .ticket-section .section-title {
     margin-bottom: 70px;
     color: #fff;
-    font-size: 40px;
+    font-size: 32px;
     font-weight: 700;
     text-align: center;
+    text-transform: uppercase;
+    font-style: normal !important;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
@@ -945,15 +949,20 @@ h2.section-title {
 }
 
 .tournament-card {
-    background: var(--bg-card);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: #1d2035;
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 12px;
-    padding: 20px;
+    padding: 16px;
     transition: all 0.3s;
     display: flex;
     flex-direction: column;
-    height: 100%; /* Fill the entire slide height */
+    height: 100%;
     width: 100%;
+}
+
+.tournament-card-tba {
+    background: #1d2035;
+    border: 1px solid rgba(255,255,255,0.08);
 }
 
 @keyframes markerPulse {
@@ -1218,13 +1227,32 @@ h2.section-title {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 40px;
     list-style: none;
     padding: 0;
+    max-width: none !important;
+}
+
+.list-brand.organizers {
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.list-brand.organizers .item-brand img {
+    height: 70px;
+}
+
+.list-brand.sponsors {
+    gap: 20px;
+}
+
+.list-brand.sponsors .item-brand img {
+    height: 45px;
 }
 
 .item-brand img {
-    height: 60px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
     filter: none !important;
     opacity: 1 !important;
     transition: all 0.3s;
@@ -1521,12 +1549,13 @@ h2.section-title {
 .decor-line.bottom-right { bottom: 15px; right: 15px; border-left: none; border-top: none; border-bottom-right-radius: 12px; }
 
 .poster-content h3 {
-    font-size: 38px;
+    font-size: 32px;
     font-weight: 800;
     color: #fff;
     margin-bottom: 20px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    font-style: normal !important;
+    letter-spacing: 2px;
     text-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
 }
 
@@ -1743,4 +1772,161 @@ h2.section-title {
 }
 .mfp-fade.mfp-wrap.mfp-removing .mfp-content {
     opacity: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOURNAMENT — Chi tiết button & hide nav
+   ═══════════════════════════════════════════════════════════════ */
+
+.section-tournament .swiper-button-next,
+.section-tournament .swiper-button-prev {
+    display: none !important;
+}
+
+.tournament-detail-btn {
+    display: block;
+    width: 100%;
+    padding: 9px 16px;
+    background: transparent;
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-align: center;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.tournament-detail-btn:hover {
+    background: var(--neon-cyan);
+    color: #0a0a12;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOURNAMENT MODAL — New Design (matching reference)
+   ═══════════════════════════════════════════════════════════════ */
+
+.tm-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.tm-modal {
+    background: #ffffff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    animation: tmFadeIn 0.25s ease;
+}
+
+@keyframes tmFadeIn {
+    from { opacity: 0; transform: scale(0.95) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.tm-thumb {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    overflow: hidden;
+    border-radius: 16px 16px 0 0;
+}
+
+.tm-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.tm-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    transition: background 0.2s;
+    z-index: 2;
+}
+.tm-close:hover { background: #fff; }
+
+.tm-body {
+    padding: 24px 28px 28px;
+}
+
+.tm-about-label {
+    font-size: 20px;
+    font-weight: 800;
+    color: #111;
+    margin: 0 0 12px;
+}
+
+.tm-intro-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #444;
+    margin: 0 0 24px;
+}
+
+/* Info bar ─ horizontal strip */
+.tm-info-bar {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 20px;
+}
+
+.tm-info-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 16px;
+}
+.tm-info-item:first-child { padding-left: 0; }
+.tm-info-item:last-child  { padding-right: 0; }
+
+.tm-info-sep {
+    width: 1px;
+    background: #e5e7eb;
+    flex-shrink: 0;
+}
+
+.tm-info-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: #111;
+    line-height: 1.2;
+}
+.tm-info-value.tm-prize {
+    color: #111;
+}
+
+.tm-info-label {
+    font-size: 12px;
+    color: #9ca3af;
+    font-weight: 500;
 }
