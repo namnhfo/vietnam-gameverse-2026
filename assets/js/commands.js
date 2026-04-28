@@ -109,7 +109,8 @@ async function fetchAgendaFromSheet() {
 function renderAgenda(day) {
     currentAgendaDay = day;
     const tbody = document.getElementById('agenda-tbody');
-    if (!tbody) return;
+    const container = document.querySelector('.cyber-table-container');
+    if (!tbody || !container) return;
 
     const data = AGENDA_LIVE || AGENDA_FALLBACK;
     const rows = data[day] || [];
@@ -119,9 +120,9 @@ function renderAgenda(day) {
         return;
     }
 
+    // Always use table layout to match reference site
     tbody.innerHTML = rows.map(item => {
         if (item.all || (!item.game && !item.wonderland && !item.b2b)) {
-            // Full-width row
             return `<tr class="agenda-row-all">
                 <td><span class="agenda-time">${item.time}</span></td>
                 <td colspan="3"><span class="agenda-badge badge-all">Tất cả khu vực</span> ${item.game || item.wonderland || item.b2b || 'Toàn bộ khu vực mở cửa'}</td>
@@ -135,6 +136,10 @@ function renderAgenda(day) {
         </tr>`;
     }).join('');
 }
+
+
+
+
 
 // ═══════════════════════════════════════════════════════════════
 // B. VENUE MAP — Interactive Booth + Cross-link Wonderland
@@ -174,8 +179,31 @@ function updateMapTransform() {
     }
 }
 
+function renderMapMarkers() {
+    const overlay = document.querySelector('.map-overlay');
+    const legend = document.querySelector('.map-legend');
+    if (!overlay || !legend || typeof VENUE_ZONES === 'undefined') return;
+
+    overlay.innerHTML = VENUE_ZONES.map(b => `
+        <g class="booth-marker ${b.hasMission ? 'mission' : ''}" data-id="${b.id}" onclick="showBoothInfo(${b.id})" title="${b.name}">
+            <circle class="pulse-ring" cx="${b.x}" cy="${b.y}" r="12" fill="none" stroke="var(--neon-cyan)" stroke-width="2" />
+            <circle cx="${b.x}" cy="${b.y}" r="12" fill="var(--neon-cyan)"/>
+            <text x="${b.x}" y="${b.y + 4}" text-anchor="middle" fill="#000" font-size="10" font-weight="bold">${b.id}</text>
+        </g>
+    `).join('');
+
+    legend.innerHTML = VENUE_ZONES.map(b => `
+        <div class="legend-item" data-id="${b.id}" style="cursor:pointer; padding: 5px; border-radius: 4px; transition: background 0.3s;" onclick="showBoothInfo(${b.id})" onmouseover="this.style.background='rgba(0,242,255,0.1)'" onmouseout="this.style.background='transparent'">
+            <span style="color:var(--neon-yellow); font-weight:bold;">(${b.id})</span> ${b.name}
+        </div>
+    `).join('');
+    
+    legend.style.gridTemplateColumns = 'repeat(auto-fill, minmax(180px, 1fr))';
+}
+
 // Drag/Pan logic
 function initMapInteraction() {
+    renderMapMarkers();
     const container = document.querySelector('.venue-map-container');
     if (!container) return;
 
@@ -223,12 +251,20 @@ function initMapInteraction() {
 function showBoothInfo(id) {
     const booth = VENUE_ZONES.find(b => b.id === id);
     const popup = document.getElementById('booth-popup');
-    if (!booth || !popup) return;
+    const sheet = document.getElementById('map-bottom-sheet');
+    const sheetContent = document.getElementById('sheet-content');
+    
+    if (!booth) return;
 
-    // Highlight active marker
+    // Highlight active marker & legend item
     document.querySelectorAll('.booth-marker').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.legend-item').forEach(l => l.classList.remove('active'));
+    
     const activeMarker = document.querySelector(`.booth-marker[data-id="${id}"]`);
     if (activeMarker) activeMarker.classList.add('active');
+
+    const activeLegend = document.querySelector(`.legend-item[data-id="${id}"]`);
+    if (activeLegend) activeLegend.classList.add('active');
 
     const missionHTML = booth.hasMission ? `
         <div class="booth-mission-block">
@@ -240,16 +276,36 @@ function showBoothInfo(id) {
             </button>
         </div>` : '';
 
-    popup.innerHTML = `
-        <button class="popup-close" onclick="closeBoothPopup()">✕</button>
+    const contentHTML = `
         <div class="popup-number">${id < 10 ? '0'+id : id}</div>
         <h4 class="popup-name">${booth.name}</h4>
         <p class="popup-desc">${booth.desc}</p>
         ${missionHTML}
         <a href="${booth.link}" target="_blank" class="popup-website">TRANG CHỦ ĐƠN VỊ →</a>
     `;
-    popup.classList.add('visible');
+
+    if (window.innerWidth <= 768 && sheet && sheetContent) {
+        // Mobile: Show Bottom Sheet
+        sheetContent.innerHTML = contentHTML;
+        sheet.classList.add('visible');
+        if (popup) popup.classList.remove('visible');
+    } else if (popup) {
+        // Desktop: Show Popup
+        popup.innerHTML = `
+            <button class="popup-close" onclick="closeBoothPopup()">✕</button>
+            ${contentHTML}
+        `;
+        popup.classList.add('visible');
+        if (sheet) sheet.classList.remove('visible');
+    }
 }
+
+function closeMapBottomSheet() {
+    const sheet = document.getElementById('map-bottom-sheet');
+    if (sheet) sheet.classList.remove('visible');
+    document.querySelectorAll('.booth-marker').forEach(m => m.classList.remove('active'));
+}
+
 
 function closeBoothPopup() {
     const popup = document.getElementById('booth-popup');
@@ -295,64 +351,64 @@ function renderFanMeeting() {
     const container = document.getElementById('fanmeeting-container');
     if (!container) return;
 
+    // Combine roster from FANMEETING_DATA
+    const roster = [
+        ...FANMEETING_DATA.roster[1].filter(p => p.name !== "???"),
+        ...FANMEETING_DATA.roster[2].filter(p => p.name !== "???"),
+        { name: "???", role: "CLASSIFIED", team: "TBA", img: "", active: false }
+    ];
+
     container.innerHTML = `
         <div class="fm-tactical-wrapper">
-            <div class="fm-header-panel">
+            <div class="fm-header-panel" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
                 <div class="fm-title-block">
                     <div class="scan-line"></div>
-
-                    <h3 class="cyber-glitch-title" data-text="${FANMEETING_DATA.title}">${FANMEETING_DATA.title}</h3>
+                    <h3 class="cyber-glitch-title" data-text="Fan Meeting: Esports All-Star">Fan Meeting: Esports All-Star</h3>
                     <p class="cyber-subtitle">${FANMEETING_DATA.subtitle}</p>
                     <p class="cyber-desc">${FANMEETING_DATA.description}</p>
-                    <a href="${FANMEETING_DATA.cta.link}" target="_blank" class="cyber-btn cyber-btn-yellow mt-3">${FANMEETING_DATA.cta.text}</a>
                 </div>
                 
-                <div class="fm-selector">
-                    <button class="cyber-btn active" data-day="1" onclick="switchRoster(1)">
-                        NGÀY 08.05
-                    </button>
-                    <button class="cyber-btn" data-day="2" onclick="switchRoster(2)">
-                        NGÀY 09.05
-                    </button>
+                <div class="fm-info-text" style="color: var(--neon-cyan); font-size: 15px; font-weight: bold; line-height: 1.8; text-align: right; background: rgba(0, 242, 255, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(0, 242, 255, 0.2);">
+                    <div>Thời gian: 11h00 - 13h00, 09/05</div>
+                    <div>Địa điểm: Sân khấu Wonderland</div>
                 </div>
             </div>
 
-            <div class="fm-roster-grid" id="fm-roster-area">
-                <!-- Interpolated via JS -->
+            <div class="swiper fanmeeting-swiper" style="margin-top: 30px; overflow: hidden;">
+                <div class="swiper-wrapper">
+                    ${roster.map(p => `
+                        <div class="swiper-slide">
+                            <div class="athlete-card ${!p.active ? 'locked' : ''}">
+                                <div class="athlete-bg" ${p.active ? `style="background-image: url('${p.img}')"` : ''}></div>
+                                <div class="athlete-hud">
+                                    <div class="athlete-info">
+                                        <div class="athlete-role">${p.role} // ${p.team}</div>
+                                        <div class="athlete-name">${p.name}</div>
+                                    </div>
+                                </div>
+                                ${!p.active ? '<div class="lock-icon"><svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>' : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="swiper-pagination" style="position: relative; margin-top: 20px;"></div>
             </div>
         </div>
     `;
 
-    switchRoster(1);
-}
-
-function switchRoster(day) {
-    document.querySelectorAll('.fm-selector .cyber-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector(`.fm-selector .cyber-btn[data-day="${day}"]`)?.classList.add('active');
-
-    const area = document.getElementById('fm-roster-area');
-    if (!area) return;
-    
-    const roster = FANMEETING_DATA.roster[day] || [];
-    
-    area.style.opacity = 0;
-    
-    setTimeout(() => {
-        area.innerHTML = roster.map(p => `
-            <div class="athlete-card ${!p.active ? 'locked' : ''}">
-                <div class="athlete-bg" ${p.active ? `style="background-image: url('${p.img}')"` : ''}></div>
-                <div class="athlete-hud">
-                    <div class="athlete-tag ${p.tag.toLowerCase()}">${p.tag}</div>
-                    <div class="athlete-info">
-                        <div class="athlete-role">${p.role} // ${p.team}</div>
-                        <div class="athlete-name">${p.name}</div>
-                    </div>
-                </div>
-                ${!p.active ? '<div class="lock-icon"><svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>' : ''}
-            </div>
-        `).join('');
-        area.style.opacity = 1;
-    }, 200);
+    // Initialize Swiper for Fan Meeting
+    new Swiper('.fanmeeting-swiper', {
+        slidesPerView: 4,
+        slidesPerGroup: 4,
+        spaceBetween: 20,
+        autoplay: { delay: 3000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        breakpoints: {
+            320: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 10 },
+            768: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 16 },
+            1024: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 20 }
+        }
+    });
 }
 
 
@@ -371,15 +427,17 @@ function initTournamentSwiper() {
     if (!container) return;
 
     tournamentSwiper = new Swiper('.game-arena-slider', {
-        slidesPerView: 4, spaceBetween: 24,
+        slidesPerView: 4, 
+        slidesPerGroup: 4,
+        spaceBetween: 24,
         observer: true, observeParents: true,
         watchSlidesProgress: true,
         pagination: { el: '.swiper-pagination', clickable: true },
         navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
         breakpoints: {
-            320: { slidesPerView: 1, spaceBetween: 10 },
-            768: { slidesPerView: 2, spaceBetween: 16 },
-            1024: { slidesPerView: 4, spaceBetween: 24 }
+            320: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 10 },
+            768: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 16 },
+            1024: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 24 }
         }
     });
 }
@@ -388,7 +446,7 @@ function renderTournaments(tournaments) {
     const container = document.getElementById('tournament-display');
     if (!container) return;
 
-    const cards = tournaments.slice(0, 3).map(tour => `
+    const cards = tournaments.map(tour => `
         <div class="swiper-slide">
             <div class="tournament-card">
                 <div class="card-image">
@@ -406,18 +464,7 @@ function renderTournaments(tournaments) {
         </div>
     `).join('');
 
-    // TBA card (4th slot to match production)
-    const tbaCard = `
-        <div class="swiper-slide">
-            <div class="tournament-card tournament-card-tba">
-                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:280px;">
-                    <p style="color:var(--neon-yellow); font-size:24px; font-weight:800; text-align:center; line-height:1.3;">To Be<br>Announced</p>
-                </div>
-            </div>
-        </div>
-    `;
-
-    container.innerHTML = cards + tbaCard;
+    container.innerHTML = cards;
     setTimeout(initTournamentSwiper, 100);
 }
 
@@ -551,7 +598,65 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         console.log('[GV2026] Scripts initialized successfully.');
+
+        // Re-render agenda on resize to switch between mobile/desktop layouts
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (typeof renderAgenda === 'function') renderAgenda(currentAgendaDay);
+            }, 250);
+        });
     } catch (err) {
         console.error('[GV2026] Critical Initialization Error:', err);
     }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// MOBILE UX ENHANCEMENTS (Bottom Nav & FAB)
+// ═══════════════════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+    const bottomNavItems = document.querySelectorAll('.mobile-bottom-nav .nav-item');
+    const sections = ['supper_masthead', 'section-agenda', 'section-venue-map', 'section-tournament'];
+
+    // Handle Scroll Spy for Bottom Nav
+    window.addEventListener('scroll', () => {
+        let currentSection = sections[0];
+        sections.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 150) {
+                    currentSection = sectionId;
+                }
+            }
+        });
+
+        bottomNavItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('data-target') === currentSection) {
+                item.classList.add('active');
+            }
+        });
+    });
+
+    // Handle Smooth Scroll for all [data-target]
+    document.querySelectorAll('[data-target]').forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = trigger.getAttribute('data-target');
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+                const headerOffset = 80;
+                const elementPosition = targetEl.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        });
+    });
 });

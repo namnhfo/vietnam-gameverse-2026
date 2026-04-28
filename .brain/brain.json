@@ -49,6 +49,7 @@
   ],
   "business_rules": [
     "Vé Combo 2 ngày được đánh dấu là 'BEST CHOICE' để khuyến khích mua.",
-    "Hành trình Wonderland hướng người dùng tham gia các booth tài trợ."
+    "Hành trình Wonderland hướng người dùng tham gia các booth tài trợ.",
+    "Chỉ thực hiện đánh số cho các gian hàng trải nghiệm có màu tím trên Sơ đồ sự kiện."
   ]
 }

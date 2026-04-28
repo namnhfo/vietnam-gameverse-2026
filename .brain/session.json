@@ -1,33 +1,32 @@
 {
-  "updated_at": "2026-04-21T01:54:30Z",
+  "updated_at": "2026-04-28T12:47:40+07:00",
   "working_on": {
-    "feature": "Dự án Vietnam GameVerse 2026 - Ticket",
-    "task": "Khởi chạy localhost và tiếp tục điều chỉnh giao diện",
-    "status": "In Progress",
+    "feature": "Sơ đồ sự kiện (Interactive Map)",
+    "task": "Tối ưu hóa hiển thị và tương tác 46 điểm đánh số trên sơ đồ mới",
+    "status": "Completed",
     "files": [
       "index.html",
       "assets/js/commands.js",
-      "assets/js/data.js"
+      "assets/js/data.js",
+      "assets/css/command-center.css"
     ],
-    "notes": "Người dùng muốn tiếp tục điều chỉnh sau khi đã lưu lại trạng thái dự án."
+    "notes": "Hệ thống tự động render markers và liên kết trực tiếp với bảng chú thích."
   },
   "pending_tasks": [
     {
-      "task": "Chạy localhost (npx serve hoặc tương đương)",
-      "priority": "high"
-    },
-    {
-      "task": "Kiểm tra tính hiển thị của các thành phần UI",
-      "priority": "medium"
+      "task": "Duy trì và tối ưu tốc độ tải hình ảnh độ phân giải cao",
+      "priority": "low"
     }
   ],
   "recent_changes": [
     {
-      "type": "documentation",
-      "description": "Khởi tạo hệ thống lưu trữ kiến thức (.brain folder)",
+      "type": "feature",
+      "description": "Thay thế sơ đồ sang file 'sodomoinhat.png'. Chỉ đánh số 46 gian hàng màu tím. Đồng bộ hiệu ứng phát quang và highlight khi bấm chọn.",
       "files": [
-        ".brain/brain.json",
-        ".brain/session.json"
+        "index.html",
+        "assets/js/commands.js",
+        "assets/js/data.js",
+        "assets/css/command-center.css"
       ]
     }
   ]

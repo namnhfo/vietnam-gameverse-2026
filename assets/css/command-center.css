@@ -966,11 +966,24 @@ h2.section-title {
 }
 
 @keyframes markerPulse {
-    0% { r: 18; opacity: 1; stroke-width: 2; }
-    100% { r: 35; opacity: 0; stroke-width: 0; }
+    0% { r: 12; opacity: 0.8; stroke-width: 1.5; }
+    100% { r: 22; opacity: 0; stroke-width: 0.5; }
 }
 
-@keyframes ringSpin {
+.booth-marker .pulse-ring {
+    opacity: 0;
+    pointer-events: none;
+}
+.booth-marker.active .pulse-ring {
+    opacity: 1;
+    animation: markerPulse 2s infinite;
+}
+
+.legend-item.active {
+    background: rgba(0, 242, 255, 0.2) !important;
+    border: 1px solid var(--neon-cyan) !important;
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+}
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
@@ -1050,13 +1063,21 @@ h2.section-title {
 .swiper-button-prev { left: 5px !important; }
 
 .swiper-pagination-bullet {
-    background: var(--text-dim);
-    opacity: 0.5;
+    background: rgba(0, 242, 255, 0.3) !important;
+    opacity: 1 !important;
+    width: 10px !important;
+    height: 10px !important;
+    border: 1px solid rgba(0, 242, 255, 0.5);
+    transition: all 0.3s ease;
 }
 
 .swiper-pagination-bullet-active {
-    background: var(--neon-cyan);
-    opacity: 1;
+    background: var(--neon-cyan) !important;
+    opacity: 1 !important;
+    width: 12px !important;
+    height: 12px !important;
+    transform: scale(1.2);
+    box-shadow: 0 0 10px var(--neon-cyan);
 }
 
 .map-zoom-controls {
@@ -1139,7 +1160,10 @@ h2.section-title {
 
 .booth-marker {
     cursor: pointer;
+    pointer-events: auto;
     transition: transform 0.3s ease;
+    transform-box: fill-box;
+    transform-origin: center;
 }
 
 .booth-marker:hover {
@@ -1186,10 +1210,7 @@ h2.section-title {
     fill: #000;
 }
 
-.booth-marker:hover circle {
-    r: 25;
-    stroke-width: 3;
-}
+
 
 .star-mission {
     fill: var(--neon-yellow);
@@ -1930,3 +1951,348 @@ h2.section-title {
     color: #9ca3af;
     font-weight: 500;
 }
+
+/* ============================================================
+   MOBILE OPTIMIZATION (375px - 768px)
+   ============================================================ */
+/* ============================================================
+   MOBILE OPTIMIZATION (375px - 768px)
+   MAPPED TO: esportsfan.net reference layout
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Global Spacing */
+    .container {
+        padding: 0 15px !important;
+    }
+    
+    .section-title {
+        font-size: 24px !important;
+        margin-bottom: 20px !important; /* Reduced from 30px */
+        padding-bottom: 16px !important;
+        background: none !important;
+        -webkit-text-fill-color: initial !important;
+        color: #fff !important;
+        text-align: center;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+    }
+
+    /* 1. Header & Menu Fix */
+    .section.top-header.header.hidde-pc {
+        display: flex !important;
+        background: #ffffff !important;
+        height: 36px !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1002 !important;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+    }
+    
+    #wrap-main-nav {
+        background: #112f73 !important;
+        height: 60px !important;
+        position: sticky !important;
+        top: 36px !important;
+        z-index: 1001 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    #wrap-main-nav .container {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100% !important;
+        gap: 10px !important;
+    }
+    
+    .col_left {
+        flex: 0 0 auto !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    h1.lbl_logo {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        height: 100% !important;
+    }
+
+    .lbl_logo .logo {
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    .lbl_logo .logo img {
+        height: 36px !important;
+        width: auto !important;
+        display: block !important;
+    }
+
+    .col_right {
+        flex: 1 1 auto !important;
+        overflow: hidden !important;
+        display: flex !important;
+        align-items: center !important;
+        height: 100% !important;
+        justify-content: flex-end !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .nav.menu_main {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px !important;
+        align-items: center !important;
+        height: 100% !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        scrollbar-width: none; /* Firefox */
+    }
+    
+    .nav.menu_main::-webkit-scrollbar {
+        display: none !important; /* Chrome/Safari/Edge */
+    }
+    
+    .nav.menu_main li {
+        display: flex !important;
+        align-items: center !important;
+        height: 100% !important;
+        visibility: visible !important;
+    }
+
+    .nav.menu_main li a {
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        white-space: nowrap !important;
+        color: #fff !important;
+        padding: 0 5px !important;
+        display: flex !important;
+        align-items: center !important;
+        height: 100% !important;
+        line-height: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* 2. Agenda Header Fix (Image 1) */
+    .time-address {
+        display: flex !important;
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 8px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .time-address .time, .time-address .address {
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: relative !important;
+        padding: 5px 0 !important;
+    }
+
+    /* 3. Agenda Table - STICKY COLUMN (Image 1) */
+    .cyber-table-container {
+        width: 100% !important;
+        overflow-x: auto !important;
+        background: var(--bg-card);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .cyber-table {
+        display: table !important;
+        width: 900px !important;
+        min-width: 900px !important;
+        table-layout: fixed !important;
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+    }
+
+    /* Sticky First Column */
+    .cyber-table th:first-child, 
+    .cyber-table td:first-child {
+        position: sticky !important;
+        left: 0 !important;
+        z-index: 10 !important;
+        background: #161625 !important;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+        width: 110px !important; /* Increased from 90px to fit time range */
+    }
+    
+    .cyber-table th:first-child {
+        background: #112f73 !important;
+        z-index: 11 !important;
+    }
+
+    .cyber-table th, .cyber-table td {
+        padding: 15px 10px !important;
+        font-size: 13px !important;
+    }
+
+    /* Column Sizing */
+    .cyber-table th:nth-child(2), .cyber-table td:nth-child(2) { width: 270px !important; }
+    .cyber-table th:nth-child(3), .cyber-table td:nth-child(3) { width: 270px !important; }
+    .cyber-table th:nth-child(4), .cyber-table td:nth-child(4) { width: 270px !important; }
+
+    /* 4. Section Padding Adjustment */
+    #section-venue-map, 
+    #section-wonderland, 
+    #section-fanmeeting, 
+    #section-tournament, 
+    #section-cosplay {
+        padding-bottom: 24px !important;
+    }
+
+    /* 5. Map Section Optimization */
+    .venue-map-container {
+        height: auto !important;
+        min-height: 250px !important;
+        background: rgba(0,0,0,0.3);
+    }
+    
+    .map-wrapper {
+        height: auto !important;
+        padding: 10px 0;
+    }
+
+    .map-wrapper img {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+
+    /* 6. Wonderland Journey (Image 2) - FIX GRID */
+    .wonderland-booth-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important; /* Force 2 columns */
+        gap: 12px !important;
+        margin-top: 15px !important;
+    }
+    
+    .wonderland-booth-card {
+        padding: 10px !important;
+        min-width: unset !important; /* Remove min-width to allow shrinking */
+        width: 100% !important;
+    }
+    
+    .wb-name {
+        font-size: 12px !important;
+        white-space: normal !important;
+        text-align: left;
+    }
+
+    /* 7. Registration Section (Ticket Cards) - Preserving integrity */
+    .ticket-section {
+        padding: 40px 0 !important;
+    }
+
+    .ticket-section .ticket-cards {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 20px !important;
+        padding: 20px 0 !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        padding-left: 15px !important; /* Visual padding for first card */
+        padding-right: 15px !important;
+    }
+
+    .ticket-section .card {
+        flex: 0 0 85% !important;
+        min-width: 290px !important;
+        border-radius: 24px !important;
+        scroll-snap-align: center;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+    }
+
+    .ticket-section .card.card-highlight {
+        background: rgba(0, 242, 255, 0.05) !important;
+        border: 1px solid rgba(0, 242, 255, 0.3) !important;
+    }
+
+    .ticket-section .card-header .price {
+        font-size: 32px !important;
+        color: #00f2ff !important;
+    }
+
+    .ticket-section .btn {
+        margin-top: 20px !important;
+        width: 100% !important;
+    }
+
+    /* 8. Swiper Active Slide Optimization */
+    .swiper-slide.swiper-slide-active {
+        width: 300px !important;
+    }
+
+    /* 9. Floating Registration Button (Bottom-Left) */
+    .mobile-floating-reg-btn {
+        display: flex !important;
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        z-index: 9999 !important;
+        background: linear-gradient(90deg, #00f2ff, #0066ff) !important;
+        color: #fff !important;
+        padding: 12px 20px !important;
+        border-radius: 50px !important;
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        box-shadow: 0 4px 15px rgba(0, 242, 255, 0.4) !important;
+        text-decoration: none !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        animation: floatingPulse 2s infinite;
+    }
+
+    @keyframes floatingPulse {
+        0% { transform: scale(1); box-shadow: 0 4px 15px rgba(0, 242, 255, 0.4); }
+        50% { transform: scale(1.05); box-shadow: 0 4px 25px rgba(0, 242, 255, 0.6); }
+        100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0, 242, 255, 0.4); }
+    }
+
+    /* 10. Floating Buttons Alignment */
+    #to_top {
+        bottom: 20px !important;
+        right: 20px !important;
+        background: rgba(0, 242, 255, 0.2) !important;
+        border: 1px solid rgba(0, 242, 255, 0.5) !important;
+        backdrop-filter: blur(5px);
+    }
+
+    /* 11. Clean up stray buttons (Force hide) */
+    .mobile-bottom-nav, 
+    .mobile-fab, 
+    .map-bottom-sheet, 
+    .section-top-header,
+    .btn-buy-ticket-mobile, /* Catching possible variations */
+    .floating-btn,
+    .btn-floating {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        z-index: -9999 !important;
+    }
+}
+
